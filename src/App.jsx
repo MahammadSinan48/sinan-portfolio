@@ -152,21 +152,107 @@ const Heading = ({ eyebrow, title }) => (
 
 /* ======= SECTIONS ======= */
 function Nav() {
-  const [open, setOpen] = useState(false); const [scrolled, setScrolled] = useState(false); const [active, setActive] = useState('home')
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [active, setActive] = useState('home')
+
   useEffect(() => {
-    const on = () => setScrolled(scrollY > 20); on(); addEventListener('scroll', on, { passive: true })
-    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && setActive(e.target.id)), { rootMargin: '-45% 0px -50% 0px' })
-    NAV.forEach(n => { const el = document.getElementById(n.toLowerCase()); el && io.observe(el) })
-    return () => { removeEventListener('scroll', on); io.disconnect() }
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id)
+          }
+        })
+      },
+      {
+        rootMargin: '-45% 0px -50% 0px',
+      }
+    )
+
+    NAV.forEach((item) => {
+      const element = document.getElementById(item.toLowerCase())
+      if (element) observer.observe(element)
+    })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      observer.disconnect()
+    }
   }, [])
+
+  const handleNavClick = () => {
+    setOpen(false)
+  }
+
   return (
     <header className={`nav ${scrolled ? 'scrolled' : ''}`}>
-      <nav className="wrap nav-in" aria-label="Main">
-        <a href="#home" className="logo">SINAN<span>.DEV</span></a>
+      {/* Animated background glow */}
+      <div className="nav-glow nav-glow-one" />
+      <div className="nav-glow nav-glow-two" />
+
+      <nav className="wrap nav-in" aria-label="Main navigation">
+
+        {/* Logo */}
+        <a href="#home" className="logo" onClick={handleNavClick}>
+          <span className="logo-main">SINAN</span>
+          <span className="logo-dot">.DEV</span>
+
+          <span className="logo-pulse" />
+        </a>
+
+        {/* Navigation */}
         <ul className={open ? 'open' : ''}>
-          {NAV.map(n => <li key={n}><a href={`#${n.toLowerCase()}`} className={active === n.toLowerCase() ? 'act' : ''} onClick={() => setOpen(false)}>{n}</a></li>)}
+          {NAV.map((item, index) => {
+            const id = item.toLowerCase()
+            const isActive = active === id
+
+            return (
+              <li
+                key={item}
+                style={{
+                  '--nav-delay': `${index * 60}ms`,
+                }}
+              >
+                <a
+                  href={`#${id}`}
+                  className={isActive ? 'act' : ''}
+                  onClick={handleNavClick}
+                >
+                  <span className="nav-number">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+
+                  <span className="nav-text">
+                    {item}
+                  </span>
+
+                  <span className="nav-line" />
+                </a>
+              </li>
+            )
+          })}
         </ul>
-        <button className="burger" aria-label="Toggle menu" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button>
+
+        {/* Mobile menu */}
+        <button
+          className={`burger ${open ? 'menu-open' : ''}`}
+          aria-label="Toggle menu"
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
       </nav>
     </header>
   )
