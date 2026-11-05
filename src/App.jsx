@@ -203,7 +203,7 @@ function Nav() {
         {/* Logo */}
         <a href="#home" className="logo" onClick={handleNavClick}>
           <span className="logo-main">SINAN</span>
-          <span className="logo-dot">.DEV</span>
+          <span className="logo-dot">.TECH</span>
 
           <span className="logo-pulse" />
         </a>
@@ -887,14 +887,16 @@ const Experience = () => (
 const Footer = () => (
   <footer className="footer">
     <div className="wrap foot-in">
-      <div className="footer-brand">
-        <a href="#home" className="logo">
-          SINAN<span>.DEV</span>
-        </a>
-        <p>
-          Building modern, meaningful & user-focused digital experiences.
-        </p>
-      </div>
+     <div className="footer-brand">
+  <a href="#home" className="logo footer-logo">
+    <span className="logo-main">SINAN</span>
+    <span className="logo-dot">.TECH</span>
+  </a>
+
+  <p>
+    Building modern, meaningful & user-focused digital experiences.
+  </p>
+</div>
 
       <div className="footer-center">
         <span>© {new Date().getFullYear()} Mahammad Sinan</span>
